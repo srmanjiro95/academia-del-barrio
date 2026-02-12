@@ -7,6 +7,8 @@
 ## Requisitos
 - Python 3.11+
 - PostgreSQL 14+
+## Requisitos
+- Python 3.11+
 - Redis
 
 ## Configuración
