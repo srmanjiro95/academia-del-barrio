@@ -17,4 +17,15 @@ async def create_internal_user(payload: InternalUserBase) -> InternalUser:
 
 @router.get("/{user_id}", response_model=InternalUser)
 async def get_internal_user(user_id: str) -> InternalUser:
-    return InternalUser(id=user_id, email="", full_name="", role_id=None)
+    return InternalUser(
+        id=user_id,
+        first_name="",
+        last_name="",
+        middle_name="",
+        email="test@example.com",
+        phone="",
+        address="",
+        role_id=None,
+        role=None,
+        emergency_contacts=[],
+    )

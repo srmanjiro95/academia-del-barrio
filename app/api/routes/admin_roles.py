@@ -12,9 +12,9 @@ async def list_roles() -> list[Role]:
 
 @router.post("", response_model=Role)
 async def create_role(payload: RoleBase) -> Role:
-    return Role(id="role_1", **payload.model_dump())
+    return Role(id="role_1", name=payload.name, permission_ids=payload.permission_ids, permissions=[])
 
 
 @router.get("/{role_id}", response_model=Role)
 async def get_role(role_id: str) -> Role:
-    return Role(id=role_id, name="", description=None)
+    return Role(id=role_id, name="", permission_ids=[], permissions=[])

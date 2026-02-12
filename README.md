@@ -86,5 +86,6 @@ uvicorn app.main:app --reload
 
 ### Tiempo real
 - `POST /events` publica eventos en Redis para fan-out a WebSockets.
-- `POST /catalog/inventory/{item_id}/discount` publica descuentos de inventario.
-- `WS /ws` canal WebSocket para actualizaciones en tiempo real.
+- `WS /ws` envía snapshots iniciales y eventos en tópicos: `inventory.updated`, `promotions.updated`, `members.updated`.
+- Puedes suscribirte por tópicos enviando: `{ "action": "subscribe", "topics": ["inventory.updated"] }`.
+- `POST /catalog/inventory/{item_id}/discount` también emite `inventory.updated`.

@@ -1,42 +1,82 @@
-from datetime import datetime
-
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
-class GymMembershipBase(BaseModel):
-    member_id: str
-    plan_id: str
-    start_date: datetime
-    end_date: datetime
+class ContactInfo(BaseModel):
+    name: str
+    phone: str
 
 
-class GymMembership(GymMembershipBase):
+class GuardianData(BaseModel):
+    name: str | None = None
+    phone: str | None = None
+
+
+class HealthData(BaseModel):
+    height: float | None = None
+    weight: float | None = None
+    bmi: float | None = None
+    allergies: str | None = None
+    diseases: str | None = None
+    previous_injuries: str | None = None
+
+
+class MembershipData(BaseModel):
     id: str
+    name: str
 
 
 class GymMemberBase(BaseModel):
-    full_name: str
-    email: str | None = None
-    phone: str | None = None
+    first_name: str
+    last_name: str
+    middle_name: str
+    email: EmailStr
+    phone: str
+    address: str
+    birth_date: str | None = None
+    health: HealthData | None = None
+    guardian: GuardianData | None = None
+    emergency_contacts: list[ContactInfo] = []
+    status: str
+    membership_id: str | None = None
+    membership_name: str | None = None
 
 
 class GymMember(GymMemberBase):
     id: str
 
 
-class QrEntryBase(BaseModel):
+class MemberMembershipBase(BaseModel):
     member_id: str
-    scanned_at: datetime
+    member_name: str
+    membership_id: str
+    membership_name: str
+    start_date: str
+    end_date: str
+    status: str
 
 
-class QrEntry(QrEntryBase):
+class MemberMembership(MemberMembershipBase):
+    id: str
+
+
+class CheckInBase(BaseModel):
+    member_id: str
+    member_name: str
+    date: str
+    status: str
+
+
+class CheckIn(CheckInBase):
     id: str
 
 
 class SaleBase(BaseModel):
-    member_id: str | None = None
+    customer: str
+    product_id: str
+    product: str
+    quantity: int
     total: float
-    created_at: datetime
+    date: str
 
 
 class Sale(SaleBase):

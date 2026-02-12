@@ -1,42 +1,54 @@
 from pydantic import BaseModel
 
 
-class PromotionBase(BaseModel):
+class ProductBase(BaseModel):
     name: str
-    description: str | None = None
-    discount_percent: float | None = None
+    units: int
+    price: float
+    description: str
+
+
+class Product(ProductBase):
+    id: str
+
+
+class MembershipBase(BaseModel):
+    name: str
+    price: float
+    duration: str
+    includes: list[str] = []
+
+
+class Membership(MembershipBase):
+    id: str
+
+
+class PromotionBase(BaseModel):
+    title: str
+    type: str
+    discount_type: str | None = None
+    amount: float
+    description: str
+    start_date: str
+    end_date: str
+    code: str
+    status: str
+    image_url: str
 
 
 class Promotion(PromotionBase):
     id: str
 
 
-class InventoryItemBase(BaseModel):
+class DevelopmentPlanBase(BaseModel):
     name: str
-    sku: str
-    quantity: int
-    price: float | None = None
+    description: str
+    member_id: str
+    member_name: str
+    focus: str
+    coach: str
+    sessions_per_week: int
 
 
-class InventoryItem(InventoryItemBase):
-    id: str
-
-
-class CatalogMembershipBase(BaseModel):
-    name: str
-    duration_days: int
-    price: float
-
-
-class CatalogMembership(CatalogMembershipBase):
-    id: str
-
-
-class PlanBase(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-
-
-class Plan(PlanBase):
+class DevelopmentPlan(DevelopmentPlanBase):
     id: str

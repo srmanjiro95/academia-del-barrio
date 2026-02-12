@@ -17,4 +17,14 @@ async def create_personal_record(payload: PersonalRecordBase) -> PersonalRecord:
 
 @router.get("/{record_id}", response_model=PersonalRecord)
 async def get_personal_record(record_id: str) -> PersonalRecord:
-    return PersonalRecord(id=record_id, employee_id="", notes=None)
+    return PersonalRecord(
+        id=record_id,
+        member_id="",
+        member_name="",
+        category="Sparring",
+        wins=0,
+        losses=0,
+        draws=0,
+        wins_by_ko=0,
+        wins_by_points=0,
+    )
