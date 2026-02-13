@@ -61,6 +61,14 @@ alembic revision --autogenerate -m "tu cambio"
 uvicorn app.main:app --reload
 ```
 
+## Documentación Swagger / OpenAPI
+
+- Swagger UI: `http://localhost:8000/swagger`
+- ReDoc: `http://localhost:8000/redoc`
+- OpenAPI JSON: `http://localhost:8000/openapi.json`
+
+Con esto puedes probar endpoints de forma rápida desde Swagger (sin Postman) y validar request/response models.
+
 ## Endpoints
 
 ### Health
