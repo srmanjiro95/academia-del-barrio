@@ -69,6 +69,18 @@ uvicorn app.main:app --reload
 
 Con esto puedes probar endpoints de forma rápida desde Swagger (sin Postman) y validar request/response models.
 
+## Persistencia real y archivos
+
+- Los endpoints de **Inventario**, **Membresías**, **Usuarios internos** y **Record personal** ya guardan en PostgreSQL.
+- Las imágenes se guardan localmente en `media/uploads/` dentro del proyecto BE.
+- Se exponen públicamente en `http://localhost:8000/media/...`.
+
+### Endpoints de carga de imagen
+- `POST /catalog/inventory/{item_id}/image`
+- `POST /catalog/memberships/{membership_id}/image`
+- `POST /admin/internal-users/{user_id}/image`
+- `POST /admin/personal-records/{record_id}/image`
+
 ## Endpoints
 
 ### Health

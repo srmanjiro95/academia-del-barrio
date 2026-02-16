@@ -36,6 +36,7 @@ class InternalUserModel(Base):
     role_id: Mapped[str | None] = mapped_column(ForeignKey("roles.id"), nullable=True)
     role: Mapped[str | None] = mapped_column(String(80), nullable=True)
     emergency_contacts: Mapped[list[dict]] = mapped_column(JSON, default=list)
+    image_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
 
 class ProductModel(Base):
@@ -45,6 +46,7 @@ class ProductModel(Base):
     units: Mapped[int] = mapped_column(Integer(), nullable=False, default=0)
     price: Mapped[float] = mapped_column(Float(), nullable=False)
     description: Mapped[str] = mapped_column(Text(), nullable=False)
+    image_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
 
 class MembershipModel(Base):
@@ -54,6 +56,7 @@ class MembershipModel(Base):
     price: Mapped[float] = mapped_column(Float(), nullable=False)
     duration: Mapped[str] = mapped_column(String(40), nullable=False)
     includes: Mapped[list[str]] = mapped_column(JSON, default=list)
+    image_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
 
 class PromotionModel(Base):
@@ -133,6 +136,7 @@ class PersonalRecordModel(Base):
     draws: Mapped[int] = mapped_column(Integer(), nullable=False, default=0)
     wins_by_ko: Mapped[int] = mapped_column(Integer(), nullable=False, default=0)
     wins_by_points: Mapped[int] = mapped_column(Integer(), nullable=False, default=0)
+    image_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
 
 class SaleModel(Base):

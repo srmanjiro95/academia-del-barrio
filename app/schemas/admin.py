@@ -36,6 +36,7 @@ class InternalUserBase(BaseModel):
     role_id: str | None = None
     role: str | None = None
     emergency_contacts: list[EmergencyContact] = []
+    image_url: str | None = None
 
 
 class InternalUser(InternalUserBase):
@@ -51,6 +52,7 @@ class PersonalRecordBase(BaseModel):
     draws: int
     wins_by_ko: int
     wins_by_points: int
+    image_url: str | None = None
 
 
 class PersonalRecord(PersonalRecordBase):

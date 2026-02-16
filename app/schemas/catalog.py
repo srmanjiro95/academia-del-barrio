@@ -6,6 +6,7 @@ class ProductBase(BaseModel):
     units: int
     price: float
     description: str
+    image_url: str | None = None
 
 
 class Product(ProductBase):
@@ -17,6 +18,7 @@ class MembershipBase(BaseModel):
     price: float
     duration: str
     includes: list[str] = []
+    image_url: str | None = None
 
 
 class Membership(MembershipBase):
