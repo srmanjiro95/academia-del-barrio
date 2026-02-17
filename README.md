@@ -23,6 +23,13 @@ Crear un archivo `.env` (opcional):
 ```bash
 REDIS_URL=redis://localhost:6379/0
 DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/academia_del_barrio
+SMTP_HOST=localhost
+SMTP_PORT=1025
+SMTP_USERNAME=
+SMTP_PASSWORD=
+SMTP_USE_TLS=false
+SMTP_FROM_EMAIL=no-reply@academiadelbarrio.local
+PUBLIC_BASE_URL=http://localhost:8000
 ```
 
 ## Instalación
@@ -71,6 +78,9 @@ Con esto puedes probar endpoints de forma rápida desde Swagger (sin Postman) y 
 
 ## Persistencia real y archivos
 
+- Correo de registro automático al crear miembro (`/gym/members`) con membresía, vigencia, precio y QR único.
+- Endpoint independiente para regenerar UUID/QR y reenviar correo: `POST /gym/members/{member_id}/refresh-qr`.
+
 - Los endpoints de **Inventario**, **Membresías**, **Usuarios internos** y **Record personal** ya guardan en PostgreSQL.
 - Las imágenes se guardan localmente en `media/uploads/` dentro del proyecto BE.
 - Se exponen públicamente en `http://localhost:8000/media/...`.
@@ -100,6 +110,7 @@ Con esto puedes probar endpoints de forma rápida desde Swagger (sin Postman) y 
 
 ### Gym
 - `GET/POST /gym/members`
+- `POST /gym/members/{member_id}/refresh-qr` regenera UUID y reenvía correo con nuevo QR.
 - `GET/POST /gym/memberships`
 - `GET/POST /gym/ingresos-qr`
 - `GET/POST /gym/sales`

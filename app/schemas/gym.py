@@ -39,6 +39,11 @@ class GymMemberBase(BaseModel):
     status: str
     membership_id: str | None = None
     membership_name: str | None = None
+    membership_start_date: str | None = None
+    membership_end_date: str | None = None
+    membership_price: float | None = None
+    qr_uuid: str | None = None
+    qr_image_url: str | None = None
 
 
 class GymMember(GymMemberBase):

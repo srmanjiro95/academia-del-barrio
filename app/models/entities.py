@@ -90,6 +90,11 @@ class GymMemberModel(Base):
     status: Mapped[str] = mapped_column(String(20), nullable=False)
     membership_id: Mapped[str | None] = mapped_column(ForeignKey("memberships.id"), nullable=True)
     membership_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    membership_start_date: Mapped[str | None] = mapped_column(String(30), nullable=True)
+    membership_end_date: Mapped[str | None] = mapped_column(String(30), nullable=True)
+    membership_price: Mapped[float | None] = mapped_column(Float(), nullable=True)
+    qr_uuid: Mapped[str | None] = mapped_column(String(64), unique=True, nullable=True)
+    qr_image_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
 
 class MemberMembershipModel(Base):

@@ -67,6 +67,11 @@ async def _send_initial_snapshots(websocket: WebSocket) -> None:
                 "status": m.status,
                 "membershipId": m.membership_id,
                 "membershipName": m.membership_name,
+                "membershipStartDate": m.membership_start_date,
+                "membershipEndDate": m.membership_end_date,
+                "membershipPrice": m.membership_price,
+                "qrUuid": m.qr_uuid,
+                "qrImageUrl": m.qr_image_url,
             }
             for m in (await session.execute(select(GymMemberModel))).scalars().all()
         ]
