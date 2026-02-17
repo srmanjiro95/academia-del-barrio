@@ -86,8 +86,11 @@ Con esto puedes probar endpoints de forma rápida desde Swagger (sin Postman) y 
 - Se exponen públicamente en `http://localhost:8000/media/...`.
 
 ### Endpoints de carga de imagen
+> Nota: estos endpoints reciben `multipart/form-data` con campo `file`.
+- `POST /uploads/image?folder=memberships` endpoint global de upload; devuelve URL absoluta + ruta relativa.
 - `POST /catalog/inventory/{item_id}/image`
-- `POST /catalog/memberships/{membership_id}/image`
+- `POST /catalog/memberships/upload-image` (compatibilidad) carga archivo y devuelve `image_url` absoluta.
+- `POST /catalog/memberships/{membership_id}/image` asigna imagen a una membresía existente.
 - `POST /admin/internal-users/{user_id}/image`
 - `POST /admin/personal-records/{record_id}/image`
 

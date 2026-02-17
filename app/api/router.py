@@ -15,11 +15,13 @@ from app.api.routes import (
     gym_sales,
     health,
     realtime,
+    uploads,
 )
 
 api_router = APIRouter()
 api_router.include_router(health.router)
 api_router.include_router(realtime.router)
+api_router.include_router(uploads.router)
 
 api_router.include_router(catalog_promotions.router)
 api_router.include_router(catalog_inventory.router)

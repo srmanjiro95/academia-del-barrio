@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.models.entities import InternalUserModel
 from app.schemas.admin import InternalUser, InternalUserBase
-from app.services.storage import save_upload_file
+from app.services.storage import absolute_media_url, save_upload_file
 
 router = APIRouter(prefix="/admin/internal-users", tags=["admin-internal-users"])
 
@@ -45,7 +45,7 @@ async def upload_internal_user_image(
     if not model:
         raise HTTPException(status_code=404, detail="Internal user not found")
 
-    model.image_url = await save_upload_file(file, "internal-users")
+    model.image_url = absolute_media_url(await save_upload_file(file, "internal-users"))
     await db.commit()
     await db.refresh(model)
     return InternalUser(**_to_dict(model))

@@ -9,7 +9,7 @@ from app.models.entities import ProductModel
 from app.schemas.catalog import Product, ProductBase
 from app.schemas.realtime import RealtimeEvent
 from app.services.realtime import publish_event
-from app.services.storage import save_upload_file
+from app.services.storage import absolute_media_url, save_upload_file
 
 router = APIRouter(prefix="/catalog/inventory", tags=["catalog-inventory"])
 
@@ -64,7 +64,7 @@ async def upload_inventory_image(
     if not model:
         raise HTTPException(status_code=404, detail="Product not found")
 
-    model.image_url = await save_upload_file(file, "inventory")
+    model.image_url = absolute_media_url(await save_upload_file(file, "inventory"))
     await db.commit()
     await db.refresh(model)
     return Product(**_to_dict(model))

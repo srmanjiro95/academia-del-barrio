@@ -3,6 +3,8 @@ from uuid import uuid4
 
 from fastapi import UploadFile
 
+from app.core.config import settings
+
 MEDIA_ROOT = Path("media/uploads")
 MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
 
@@ -19,3 +21,9 @@ async def save_upload_file(upload: UploadFile, folder: str) -> str:
     destination.write_bytes(content)
 
     return f"/media/uploads/{folder}/{filename}"
+
+
+def absolute_media_url(path: str) -> str:
+    if path.startswith("http://") or path.startswith("https://"):
+        return path
+    return f"{settings.public_base_url.rstrip('/')}{path}"

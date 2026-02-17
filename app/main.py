@@ -23,6 +23,7 @@ OPENAPI_TAGS = [
     {"name": "gym-memberships", "description": "Asignaciones de membresía por miembro."},
     {"name": "gym-ingresos-qr", "description": "Check-ins vía QR."},
     {"name": "gym-sales", "description": "Ventas y movimientos comerciales."},
+    {"name": "uploads", "description": "Carga global de archivos/imágenes."},
 ]
 
 

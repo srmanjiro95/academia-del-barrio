@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.models.entities import PersonalRecordModel
 from app.schemas.admin import PersonalRecord, PersonalRecordBase
-from app.services.storage import save_upload_file
+from app.services.storage import absolute_media_url, save_upload_file
 
 router = APIRouter(prefix="/admin/personal-records", tags=["admin-personal-records"])
 
@@ -45,7 +45,7 @@ async def upload_personal_record_image(
     if not model:
         raise HTTPException(status_code=404, detail="Personal record not found")
 
-    model.image_url = await save_upload_file(file, "personal-records")
+    model.image_url = absolute_media_url(await save_upload_file(file, "personal-records"))
     await db.commit()
     await db.refresh(model)
     return PersonalRecord(**_to_dict(model))
