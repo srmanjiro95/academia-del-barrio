@@ -75,6 +75,10 @@ class CheckIn(CheckInBase):
     id: str
 
 
+class CheckInByQRRequest(BaseModel):
+    qr_uuid: str
+
+
 class SaleBase(BaseModel):
     customer: str
     product_id: str

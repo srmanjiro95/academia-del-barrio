@@ -116,7 +116,7 @@ Con esto puedes probar endpoints de forma rápida desde Swagger (sin Postman) y 
 - `GET/POST /gym/members`
 - `POST /gym/members/{member_id}/refresh-qr` regenera UUID y reenvía correo con nuevo QR.
 - `GET/POST /gym/memberships`
-- `GET/POST /gym/ingresos-qr`
+- `GET/POST /gym/ingresos-qr` (POST recibe `{ "qr_uuid": "..." }` y registra ingreso automáticamente).
 - `GET/POST /gym/sales`
 
 ### Tiempo real
