@@ -44,6 +44,7 @@ class GymMemberBase(BaseModel):
     membership_price: float | None = None
     qr_uuid: str | None = None
     qr_image_url: str | None = None
+    image_url: str | None = None
 
 
 class GymMember(GymMemberBase):
@@ -90,3 +91,37 @@ class SaleBase(BaseModel):
 
 class Sale(SaleBase):
     id: str
+
+
+class FightRecord(BaseModel):
+    id: str
+    category: str
+    wins: int
+    losses: int
+    draws: int
+    wins_by_ko: int
+    wins_by_points: int
+
+
+class FightRecordSummary(BaseModel):
+    total_wins: int
+    total_losses: int
+    total_draws: int
+    total_wins_by_ko: int
+    total_wins_by_points: int
+
+
+class MemberScannerCard(BaseModel):
+    id: str
+    full_name: str
+    status: str
+    membership_name: str | None = None
+    membership_end_date: str | None = None
+    image_url: str | None = None
+
+
+class QRScanResponse(BaseModel):
+    checkin: CheckIn
+    member: MemberScannerCard
+    fight_records: list[FightRecord]
+    fight_summary: FightRecordSummary

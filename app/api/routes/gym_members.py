@@ -149,4 +149,5 @@ def _to_dict(model: GymMemberModel) -> dict:
         "membership_price": model.membership_price,
         "qr_uuid": model.qr_uuid,
         "qr_image_url": model.qr_image_url,
+        "image_url": model.image_url,
     }

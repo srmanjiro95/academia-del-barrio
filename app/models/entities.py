@@ -95,6 +95,7 @@ class GymMemberModel(Base):
     membership_price: Mapped[float | None] = mapped_column(Float(), nullable=True)
     qr_uuid: Mapped[str | None] = mapped_column(String(64), unique=True, nullable=True)
     qr_image_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    image_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
 
 class MemberMembershipModel(Base):
