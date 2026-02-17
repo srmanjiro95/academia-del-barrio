@@ -6,12 +6,13 @@ class Settings(BaseSettings):
     environment: str = "local"
     redis_url: str = "redis://localhost:6379/0"
     database_url: str = "postgresql+psycopg://postgres:dPUyBFH0105@localhost:5432/academia_del_barrio"
-    smtp_host: str = "localhost"
-    smtp_port: int = 1025
-    smtp_username: str | None = None
-    smtp_password: str | None = None
-    smtp_use_tls: bool = False
-    smtp_from_email: str = "no-reply@academiadelbarrio.local"
+    smtp_host: str = "smtp.gmail.com"
+    smtp_port: int = 587
+    smtp_username: str = "nightwing317.esk@gmail.com"
+    smtp_password: str = "obhxobvtnstgilaw"
+    smtp_use_tls: bool = True
+    smtp_from_email: str = "nightwing317.esk@gmail.com"
+
 
     public_base_url: str = "http://localhost:8000"
 

@@ -79,6 +79,7 @@ Con esto puedes probar endpoints de forma rápida desde Swagger (sin Postman) y 
 ## Persistencia real y archivos
 
 - Correo de registro automático al crear miembro (`/gym/members`) con membresía, vigencia, precio y QR único.
+- Al crear miembro se autocompletan `membership_start_date`, `membership_end_date`, `membership_price` y se crea vínculo en `member_memberships` cuando se envía `membership_id`.
 - Endpoint independiente para regenerar UUID/QR y reenviar correo: `POST /gym/members/{member_id}/refresh-qr`.
 
 - Los endpoints de **Inventario**, **Membresías**, **Usuarios internos** y **Record personal** ya guardan en PostgreSQL.
