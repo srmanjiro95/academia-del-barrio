@@ -91,6 +91,7 @@ def _to_dict(model: ProductModel) -> dict:
     return {
         "id": model.id,
         "name": model.name,
+        "category": model.category,
         "units": model.units,
         "price": model.price,
         "description": model.description,

@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 class ProductBase(BaseModel):
     name: str
+    category: str = "General"
     units: int
     price: float
     description: str
@@ -36,6 +37,10 @@ class PromotionBase(BaseModel):
     code: str
     status: str
     image_url: str
+    applies_to: str = "all_store"
+    target_category: str | None = None
+    target_product_ids: list[str] = []
+    target_membership_ids: list[str] = []
 
 
 class Promotion(PromotionBase):

@@ -21,7 +21,8 @@ async def list_promotions(db: AsyncSession = Depends(get_db)) -> list[Promotion]
 
 @router.post("", response_model=Promotion)
 async def create_promotion(payload: PromotionBase, db: AsyncSession = Depends(get_db)) -> Promotion:
-    model = PromotionModel(id=uuid4().hex, **payload.model_dump())
+    data = _normalize_and_validate(payload)
+    model = PromotionModel(id=uuid4().hex, **data)
     db.add(model)
     await db.commit()
     await db.refresh(model)
@@ -37,7 +38,7 @@ async def update_promotion(promotion_id: str, payload: PromotionBase, db: AsyncS
     if not model:
         raise HTTPException(status_code=404, detail="Promotion not found")
 
-    for key, value in payload.model_dump().items():
+    for key, value in _normalize_and_validate(payload).items():
         setattr(model, key, value)
 
     await db.commit()
@@ -56,6 +57,44 @@ async def get_promotion(promotion_id: str, db: AsyncSession = Depends(get_db)) -
     return Promotion(**_to_dict(model))
 
 
+def _normalize_and_validate(payload: PromotionBase) -> dict:
+    data = payload.model_dump()
+
+    applies_to = (data.get("applies_to") or "all_store").strip().lower().replace(" ", "_")
+    data["applies_to"] = applies_to
+
+    if applies_to == "all_store":
+        data["target_category"] = None
+        data["target_product_ids"] = []
+        data["target_membership_ids"] = []
+    elif applies_to == "category":
+        if not data.get("target_category"):
+            raise HTTPException(status_code=422, detail="target_category is required when applies_to=category")
+        data["target_product_ids"] = []
+        data["target_membership_ids"] = []
+    elif applies_to == "products":
+        if not data.get("target_product_ids"):
+            raise HTTPException(status_code=422, detail="target_product_ids is required when applies_to=products")
+        data["target_category"] = None
+        data["target_membership_ids"] = []
+    elif applies_to == "membership":
+        if not data.get("target_membership_ids"):
+            raise HTTPException(status_code=422, detail="target_membership_ids is required when applies_to=membership")
+        data["target_category"] = None
+        data["target_product_ids"] = []
+    else:
+        raise HTTPException(status_code=422, detail="applies_to must be one of: all_store, category, products, membership")
+
+    if (data.get("type") or "").lower() == "inscripción":
+        if applies_to != "products" or len(data.get("target_product_ids") or []) != 1:
+            raise HTTPException(
+                status_code=422,
+                detail="Type 'Inscripción' must target exactly one product (applies_to=products with one target_product_id)",
+            )
+
+    return data
+
+
 def _to_dict(model: PromotionModel) -> dict:
     return {
         "id": model.id,
@@ -69,4 +108,8 @@ def _to_dict(model: PromotionModel) -> dict:
         "code": model.code,
         "status": model.status,
         "image_url": model.image_url,
+        "applies_to": model.applies_to,
+        "target_category": model.target_category,
+        "target_product_ids": model.target_product_ids,
+        "target_membership_ids": model.target_membership_ids,
     }

@@ -43,6 +43,7 @@ class ProductModel(Base):
     __tablename__ = "products"
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     name: Mapped[str] = mapped_column(String(150), nullable=False)
+    category: Mapped[str] = mapped_column(String(120), nullable=False, default="General")
     units: Mapped[int] = mapped_column(Integer(), nullable=False, default=0)
     price: Mapped[float] = mapped_column(Float(), nullable=False)
     description: Mapped[str] = mapped_column(Text(), nullable=False)
@@ -72,6 +73,10 @@ class PromotionModel(Base):
     code: Mapped[str] = mapped_column(String(60), unique=True, nullable=False)
     status: Mapped[str] = mapped_column(String(20), nullable=False)
     image_url: Mapped[str] = mapped_column(String(255), nullable=False)
+    applies_to: Mapped[str] = mapped_column(String(30), nullable=False, default="all_store")
+    target_category: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    target_product_ids: Mapped[list[str]] = mapped_column(JSON, default=list)
+    target_membership_ids: Mapped[list[str]] = mapped_column(JSON, default=list)
 
 
 class GymMemberModel(Base):

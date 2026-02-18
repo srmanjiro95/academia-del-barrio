@@ -133,6 +133,16 @@ Con esto puedes probar endpoints de forma rápida desde Swagger (sin Postman) y 
 - `GET/POST /gym/sales`
 - `PUT /gym/sales/{sale_id}`
 
+### Promociones (nueva lógica de alcance)
+- `applies_to` define alcance: `all_store`, `category`, `products`, `membership`.
+- `target_category` se usa cuando `applies_to=category`.
+- `target_product_ids` se usa cuando `applies_to=products`.
+- `target_membership_ids` se usa cuando `applies_to=membership`.
+- Para `type=Inscripción`, la promoción debe aplicarse a **un solo producto** (`applies_to=products` con un elemento).
+
+### Inventario
+- Se añadió `category` (string) para clasificar productos en catálogos específicos.
+
 ### Tiempo real
 - `POST /events` publica eventos en Redis para fan-out a WebSockets.
 - `WS /ws` envía snapshots iniciales y eventos en tópicos: `inventory.updated`, `promotions.updated`, `members.updated`.
