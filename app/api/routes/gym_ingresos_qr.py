@@ -9,6 +9,7 @@ from app.db.session import get_db
 from app.models.entities import CheckInModel, GymMemberModel, PersonalRecordModel
 from app.schemas.gym import (
     CheckIn,
+    CheckInBase,
     CheckInByQRRequest,
     FightRecord,
     FightRecordSummary,
@@ -95,6 +96,24 @@ async def create_qr_entry(payload: CheckInByQRRequest, db: AsyncSession = Depend
     await publish_event(RealtimeEvent(topic="members.updated", payload={"checkin": checkin.model_dump()}))
     return response
 
+
+@router.put("/{entry_id}", response_model=CheckIn)
+async def update_qr_entry(entry_id: str, payload: CheckInBase, db: AsyncSession = Depends(get_db)) -> CheckIn:
+    model = await db.get(CheckInModel, entry_id)
+    if not model:
+        raise HTTPException(status_code=404, detail="Check-in not found")
+
+    model.member_id = payload.member_id
+    model.member_name = payload.member_name
+    model.date = payload.date
+    model.status = payload.status
+
+    await db.commit()
+    await db.refresh(model)
+
+    checkin = CheckIn(**_to_checkin_dict(model))
+    await publish_event(RealtimeEvent(topic="members.updated", payload={"checkin": checkin.model_dump()}))
+    return checkin
 
 @router.get("/{entry_id}", response_model=CheckIn)
 async def get_qr_entry(entry_id: str, db: AsyncSession = Depends(get_db)) -> CheckIn:

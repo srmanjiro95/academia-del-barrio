@@ -31,6 +31,23 @@ async def create_sale(payload: SaleBase, db: AsyncSession = Depends(get_db)) -> 
     return sale
 
 
+@router.put("/{sale_id}", response_model=Sale)
+async def update_sale(sale_id: str, payload: SaleBase, db: AsyncSession = Depends(get_db)) -> Sale:
+    model = await db.get(SaleModel, sale_id)
+    if not model:
+        raise HTTPException(status_code=404, detail="Sale not found")
+
+    for key, value in payload.model_dump().items():
+        setattr(model, key, value)
+
+    await db.commit()
+    await db.refresh(model)
+
+    sale = Sale(**_to_dict(model))
+    await publish_event(RealtimeEvent(topic="inventory.updated", payload={"sale": sale.model_dump()}))
+    return sale
+
+
 @router.get("/{sale_id}", response_model=Sale)
 async def get_sale(sale_id: str, db: AsyncSession = Depends(get_db)) -> Sale:
     model = await db.get(SaleModel, sale_id)

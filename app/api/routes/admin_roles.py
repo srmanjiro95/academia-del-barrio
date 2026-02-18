@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import insert, select
+from sqlalchemy import delete, insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
@@ -22,10 +22,20 @@ async def create_role(payload: RoleBase, db: AsyncSession = Depends(get_db)) -> 
     role = RoleModel(id=uuid4().hex, name=payload.name)
     db.add(role)
     await db.flush()
+    await _set_role_permissions(db, role.id, payload.permission_ids)
+    await db.commit()
+    await db.refresh(role)
+    return await _build_role_response(db, role)
 
-    for permission_id in payload.permission_ids:
-        await db.execute(insert(role_permissions).values(role_id=role.id, permission_id=permission_id))
 
+@router.put("/{role_id}", response_model=Role)
+async def update_role(role_id: str, payload: RoleBase, db: AsyncSession = Depends(get_db)) -> Role:
+    role = await db.get(RoleModel, role_id)
+    if not role:
+        raise HTTPException(status_code=404, detail="Role not found")
+
+    role.name = payload.name
+    await _set_role_permissions(db, role.id, payload.permission_ids)
     await db.commit()
     await db.refresh(role)
     return await _build_role_response(db, role)
@@ -37,6 +47,12 @@ async def get_role(role_id: str, db: AsyncSession = Depends(get_db)) -> Role:
     if not role:
         raise HTTPException(status_code=404, detail="Role not found")
     return await _build_role_response(db, role)
+
+
+async def _set_role_permissions(db: AsyncSession, role_id: str, permission_ids: list[str]) -> None:
+    await db.execute(delete(role_permissions).where(role_permissions.c.role_id == role_id))
+    for permission_id in permission_ids:
+        await db.execute(insert(role_permissions).values(role_id=role_id, permission_id=permission_id))
 
 
 async def _build_role_response(db: AsyncSession, role: RoleModel) -> Role:

@@ -102,24 +102,36 @@ Con esto puedes probar endpoints de forma rápida desde Swagger (sin Postman) y 
 
 ### Catálogo
 - `GET/POST /catalog/promotions`
+- `PUT /catalog/promotions/{promotion_id}`
 - `GET/POST /catalog/inventory`
+- `PUT /catalog/inventory/{item_id}`
 - `GET/POST /catalog/memberships`
+- `PUT /catalog/memberships/{membership_id}`
 - `GET/POST /catalog/plans`
+- `PUT /catalog/plans/{plan_id}`
   - En planes, `member_id` es opcional (catálogo sin asignación inmediata).
 - `PUT /catalog/plans/{plan_id}` para editar plan y asignación opcional de miembro.
 
 ### Administración
 - `GET/POST /admin/roles`
+- `PUT /admin/roles/{role_id}`
 - `GET/POST /admin/permissions`
+- `PUT /admin/permissions/{permission_id}`
 - `GET/POST /admin/internal-users`
+- `PUT /admin/internal-users/{user_id}`
 - `GET/POST /admin/personal-records`
+- `PUT /admin/personal-records/{record_id}`
 
 ### Gym
 - `GET/POST /gym/members`
+- `PUT /gym/members/{member_id}`
 - `POST /gym/members/{member_id}/refresh-qr` regenera UUID y reenvía correo con nuevo QR.
 - `GET/POST /gym/memberships`
+- `PUT /gym/memberships/{membership_id}`
 - `GET/POST /gym/ingresos-qr` (POST recibe `{ "qr_uuid": "..." }`, registra ingreso y devuelve card para modal con info de miembro + récord de peleas).
+- `PUT /gym/ingresos-qr/{entry_id}`
 - `GET/POST /gym/sales`
+- `PUT /gym/sales/{sale_id}`
 
 ### Tiempo real
 - `POST /events` publica eventos en Redis para fan-out a WebSockets.

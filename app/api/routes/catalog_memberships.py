@@ -32,6 +32,24 @@ async def create_catalog_membership(payload: MembershipBase, db: AsyncSession = 
     return Membership(**_to_dict(model))
 
 
+@router.put("/{membership_id}", response_model=Membership)
+async def update_catalog_membership(
+    membership_id: str,
+    payload: MembershipBase,
+    db: AsyncSession = Depends(get_db),
+) -> Membership:
+    model = await db.get(MembershipModel, membership_id)
+    if not model:
+        raise HTTPException(status_code=404, detail="Membership not found")
+
+    for key, value in payload.model_dump().items():
+        setattr(model, key, value)
+
+    await db.commit()
+    await db.refresh(model)
+    return Membership(**_to_dict(model))
+
+
 @router.get("/{membership_id}", response_model=Membership)
 async def get_catalog_membership(membership_id: str, db: AsyncSession = Depends(get_db)) -> Membership:
     model = await db.get(MembershipModel, membership_id)

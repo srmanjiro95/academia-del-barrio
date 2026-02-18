@@ -31,6 +31,23 @@ async def create_promotion(payload: PromotionBase, db: AsyncSession = Depends(ge
     return promotion
 
 
+@router.put("/{promotion_id}", response_model=Promotion)
+async def update_promotion(promotion_id: str, payload: PromotionBase, db: AsyncSession = Depends(get_db)) -> Promotion:
+    model = await db.get(PromotionModel, promotion_id)
+    if not model:
+        raise HTTPException(status_code=404, detail="Promotion not found")
+
+    for key, value in payload.model_dump().items():
+        setattr(model, key, value)
+
+    await db.commit()
+    await db.refresh(model)
+
+    promotion = Promotion(**_to_dict(model))
+    await publish_event(RealtimeEvent(topic="promotions.updated", payload=promotion.model_dump()))
+    return promotion
+
+
 @router.get("/{promotion_id}", response_model=Promotion)
 async def get_promotion(promotion_id: str, db: AsyncSession = Depends(get_db)) -> Promotion:
     model = await db.get(PromotionModel, promotion_id)

@@ -32,6 +32,23 @@ async def create_inventory_item(payload: ProductBase, db: AsyncSession = Depends
     return product
 
 
+@router.put("/{item_id}", response_model=Product)
+async def update_inventory_item(item_id: str, payload: ProductBase, db: AsyncSession = Depends(get_db)) -> Product:
+    model = await db.get(ProductModel, item_id)
+    if not model:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    for key, value in payload.model_dump().items():
+        setattr(model, key, value)
+
+    await db.commit()
+    await db.refresh(model)
+
+    product = Product(**_to_dict(model))
+    await publish_event(RealtimeEvent(topic="inventory.updated", payload=product.model_dump()))
+    return product
+
+
 @router.get("/{item_id}", response_model=Product)
 async def get_inventory_item(item_id: str, db: AsyncSession = Depends(get_db)) -> Product:
     model = await db.get(ProductModel, item_id)

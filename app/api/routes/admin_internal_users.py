@@ -27,6 +27,20 @@ async def create_internal_user(payload: InternalUserBase, db: AsyncSession = Dep
     return InternalUser(**_to_dict(model))
 
 
+@router.put("/{user_id}", response_model=InternalUser)
+async def update_internal_user(user_id: str, payload: InternalUserBase, db: AsyncSession = Depends(get_db)) -> InternalUser:
+    model = await db.get(InternalUserModel, user_id)
+    if not model:
+        raise HTTPException(status_code=404, detail="Internal user not found")
+
+    for key, value in payload.model_dump().items():
+        setattr(model, key, value)
+
+    await db.commit()
+    await db.refresh(model)
+    return InternalUser(**_to_dict(model))
+
+
 @router.get("/{user_id}", response_model=InternalUser)
 async def get_internal_user(user_id: str, db: AsyncSession = Depends(get_db)) -> InternalUser:
     model = await db.get(InternalUserModel, user_id)

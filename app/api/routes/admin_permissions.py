@@ -26,6 +26,17 @@ async def create_permission(payload: PermissionCreate, db: AsyncSession = Depend
     return Permissions(id=model.id, name=model.name)
 
 
+@router.put("/{permission_id}", response_model=Permissions)
+async def update_permission(permission_id: str, payload: PermissionCreate, db: AsyncSession = Depends(get_db)) -> Permissions:
+    model = await db.get(PermissionModel, permission_id)
+    if not model:
+        raise HTTPException(status_code=404, detail="Permission not found")
+    model.name = payload.name
+    await db.commit()
+    await db.refresh(model)
+    return Permissions(id=model.id, name=model.name)
+
+
 @router.get("/{permission_id}", response_model=Permissions)
 async def get_permission(permission_id: str, db: AsyncSession = Depends(get_db)) -> Permissions:
     model = await db.get(PermissionModel, permission_id)

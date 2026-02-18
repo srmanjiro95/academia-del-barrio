@@ -27,6 +27,20 @@ async def create_personal_record(payload: PersonalRecordBase, db: AsyncSession =
     return PersonalRecord(**_to_dict(model))
 
 
+@router.put("/{record_id}", response_model=PersonalRecord)
+async def update_personal_record(record_id: str, payload: PersonalRecordBase, db: AsyncSession = Depends(get_db)) -> PersonalRecord:
+    model = await db.get(PersonalRecordModel, record_id)
+    if not model:
+        raise HTTPException(status_code=404, detail="Personal record not found")
+
+    for key, value in payload.model_dump().items():
+        setattr(model, key, value)
+
+    await db.commit()
+    await db.refresh(model)
+    return PersonalRecord(**_to_dict(model))
+
+
 @router.get("/{record_id}", response_model=PersonalRecord)
 async def get_personal_record(record_id: str, db: AsyncSession = Depends(get_db)) -> PersonalRecord:
     model = await db.get(PersonalRecordModel, record_id)

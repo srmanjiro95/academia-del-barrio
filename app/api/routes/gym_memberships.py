@@ -26,6 +26,24 @@ async def create_gym_membership(payload: MemberMembershipBase, db: AsyncSession 
     return MemberMembership(**_to_dict(model))
 
 
+@router.put("/{membership_id}", response_model=MemberMembership)
+async def update_gym_membership(
+    membership_id: str,
+    payload: MemberMembershipBase,
+    db: AsyncSession = Depends(get_db),
+) -> MemberMembership:
+    model = await db.get(MemberMembershipModel, membership_id)
+    if not model:
+        raise HTTPException(status_code=404, detail="Member membership not found")
+
+    for key, value in payload.model_dump().items():
+        setattr(model, key, value)
+
+    await db.commit()
+    await db.refresh(model)
+    return MemberMembership(**_to_dict(model))
+
+
 @router.get("/{membership_id}", response_model=MemberMembership)
 async def get_gym_membership(membership_id: str, db: AsyncSession = Depends(get_db)) -> MemberMembership:
     model = await db.get(MemberMembershipModel, membership_id)

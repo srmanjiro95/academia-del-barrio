@@ -71,6 +71,36 @@ async def create_member(payload: GymMemberBase, db: AsyncSession = Depends(get_d
     return member
 
 
+
+
+@router.put("/{member_id}", response_model=GymMember)
+async def update_member(member_id: str, payload: GymMemberBase, db: AsyncSession = Depends(get_db)) -> GymMember:
+    model = await db.get(GymMemberModel, member_id)
+    if not model:
+        raise HTTPException(status_code=404, detail="Member not found")
+
+    membership = await _resolve_membership(db, payload.membership_id)
+    membership_name = payload.membership_name or (membership.name if membership else None)
+    membership_price = payload.membership_price if payload.membership_price is not None else (membership.price if membership else None)
+    start_date = payload.membership_start_date or model.membership_start_date or datetime.utcnow().strftime("%Y-%m-%d")
+    end_date = payload.membership_end_date or _calculate_end_date(start_date, membership.duration if membership else None)
+
+    data = payload.model_dump(exclude={"qr_uuid", "qr_image_url", "membership_name", "membership_price", "membership_start_date", "membership_end_date"})
+    for key, value in data.items():
+        setattr(model, key, value)
+
+    model.membership_name = membership_name
+    model.membership_price = membership_price
+    model.membership_start_date = start_date
+    model.membership_end_date = end_date
+
+    await db.commit()
+    await db.refresh(model)
+
+    member = GymMember(**_to_dict(model))
+    await publish_event(RealtimeEvent(topic="members.updated", payload=member.model_dump()))
+    return member
+
 @router.post("/{member_id}/refresh-qr", response_model=GymMember)
 async def refresh_member_qr(member_id: str, db: AsyncSession = Depends(get_db)) -> GymMember:
     model = await db.get(GymMemberModel, member_id)
