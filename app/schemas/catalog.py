@@ -45,8 +45,8 @@ class Promotion(PromotionBase):
 class DevelopmentPlanBase(BaseModel):
     name: str
     description: str
-    member_id: str
-    member_name: str
+    member_id: str | None = None
+    member_name: str | None = None
     focus: str
     coach: str
     sessions_per_week: int

@@ -105,6 +105,8 @@ Con esto puedes probar endpoints de forma rápida desde Swagger (sin Postman) y 
 - `GET/POST /catalog/inventory`
 - `GET/POST /catalog/memberships`
 - `GET/POST /catalog/plans`
+  - En planes, `member_id` es opcional (catálogo sin asignación inmediata).
+- `PUT /catalog/plans/{plan_id}` para editar plan y asignación opcional de miembro.
 
 ### Administración
 - `GET/POST /admin/roles`

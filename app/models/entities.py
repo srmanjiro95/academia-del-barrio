@@ -101,8 +101,8 @@ class GymMemberModel(Base):
 class MemberMembershipModel(Base):
     __tablename__ = "member_memberships"
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    member_id: Mapped[str] = mapped_column(ForeignKey("gym_members.id"), nullable=False)
-    member_name: Mapped[str] = mapped_column(String(180), nullable=False)
+    member_id: Mapped[str | None] = mapped_column(ForeignKey("gym_members.id"), nullable=True)
+    member_name: Mapped[str | None] = mapped_column(String(180), nullable=True)
     membership_id: Mapped[str] = mapped_column(ForeignKey("memberships.id"), nullable=False)
     membership_name: Mapped[str] = mapped_column(String(120), nullable=False)
     start_date: Mapped[str] = mapped_column(String(30), nullable=False)
@@ -113,8 +113,8 @@ class MemberMembershipModel(Base):
 class CheckInModel(Base):
     __tablename__ = "checkins"
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    member_id: Mapped[str] = mapped_column(ForeignKey("gym_members.id"), nullable=False)
-    member_name: Mapped[str] = mapped_column(String(180), nullable=False)
+    member_id: Mapped[str | None] = mapped_column(ForeignKey("gym_members.id"), nullable=True)
+    member_name: Mapped[str | None] = mapped_column(String(180), nullable=True)
     date: Mapped[str] = mapped_column(String(30), nullable=False)
     status: Mapped[str] = mapped_column(String(20), nullable=False)
 
@@ -124,8 +124,8 @@ class DevelopmentPlanModel(Base):
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     description: Mapped[str] = mapped_column(Text(), nullable=False)
-    member_id: Mapped[str] = mapped_column(ForeignKey("gym_members.id"), nullable=False)
-    member_name: Mapped[str] = mapped_column(String(180), nullable=False)
+    member_id: Mapped[str | None] = mapped_column(ForeignKey("gym_members.id"), nullable=True)
+    member_name: Mapped[str | None] = mapped_column(String(180), nullable=True)
     focus: Mapped[str] = mapped_column(String(120), nullable=False)
     coach: Mapped[str] = mapped_column(String(120), nullable=False)
     sessions_per_week: Mapped[int] = mapped_column(Integer(), nullable=False)
@@ -134,8 +134,8 @@ class DevelopmentPlanModel(Base):
 class PersonalRecordModel(Base):
     __tablename__ = "personal_records"
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    member_id: Mapped[str] = mapped_column(ForeignKey("gym_members.id"), nullable=False)
-    member_name: Mapped[str] = mapped_column(String(180), nullable=False)
+    member_id: Mapped[str | None] = mapped_column(ForeignKey("gym_members.id"), nullable=True)
+    member_name: Mapped[str | None] = mapped_column(String(180), nullable=True)
     category: Mapped[str] = mapped_column(String(20), nullable=False)
     wins: Mapped[int] = mapped_column(Integer(), nullable=False, default=0)
     losses: Mapped[int] = mapped_column(Integer(), nullable=False, default=0)
