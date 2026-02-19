@@ -59,9 +59,17 @@ async def get_promotion(promotion_id: str, db: AsyncSession = Depends(get_db)) -
 
 def _normalize_and_validate(payload: PromotionBase) -> dict:
     data = payload.model_dump()
+    promotion_type = (data.get("type") or "").strip().lower()
 
     applies_to = (data.get("applies_to") or "all_store").strip().lower().replace(" ", "_")
     data["applies_to"] = applies_to
+
+    if promotion_type in {"inscripción", "inscripcion"}:
+        data["applies_to"] = "all_store"
+        data["target_category"] = None
+        data["target_product_ids"] = []
+        data["target_membership_ids"] = []
+        return data
 
     if applies_to == "all_store":
         data["target_category"] = None
@@ -84,13 +92,6 @@ def _normalize_and_validate(payload: PromotionBase) -> dict:
         data["target_product_ids"] = []
     else:
         raise HTTPException(status_code=422, detail="applies_to must be one of: all_store, category, products, membership")
-
-    if (data.get("type") or "").lower() == "inscripción":
-        if applies_to != "products" or len(data.get("target_product_ids") or []) != 1:
-            raise HTTPException(
-                status_code=422,
-                detail="Type 'Inscripción' must target exactly one product (applies_to=products with one target_product_id)",
-            )
 
     return data
 

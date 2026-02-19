@@ -138,7 +138,7 @@ Con esto puedes probar endpoints de forma rápida desde Swagger (sin Postman) y 
 - `target_category` se usa cuando `applies_to=category`.
 - `target_product_ids` se usa cuando `applies_to=products`.
 - `target_membership_ids` se usa cuando `applies_to=membership`.
-- Para `type=Inscripción`, la promoción debe aplicarse a **un solo producto** (`applies_to=products` con un elemento).
+- Para `type=Inscripción`, no se requiere producto/categoría/membresía específica; se ignoran targets y se guarda como promoción simple.
 
 ### Inventario
 - Se añadió `category` (string) para clasificar productos en catálogos específicos.
